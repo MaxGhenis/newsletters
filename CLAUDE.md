@@ -53,9 +53,9 @@ All newsletter HTML files follow this pattern:
 - **No JavaScript**: Email clients block JavaScript
 - **External images**: Use full URLs for all images
 - **Responsive design**: Use media queries in `<style>` tags for mobile
-- **Logo format**: Use PNG, not SVG - many email clients don't render SVGs properly
-  - Upload logo PNG to Mailchimp Content Studio and use that hosted URL
-  - Or host on policyengine.org and reference the PNG version
+- **Logo format**: SVG works in Mailchimp preview, but PNG is safer for broad email client compatibility
+  - Current SVG URL works fine for most clients
+  - Consider PNG for maximum compatibility (Outlook and some other clients block SVGs)
 
 ## File Naming Conventions
 
