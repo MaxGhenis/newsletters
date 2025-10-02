@@ -29,3 +29,12 @@ logs/
 config.js
 *.key
 *.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.coverage
+htmlcov/
+.pytest_cache/
