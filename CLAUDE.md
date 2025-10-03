@@ -123,3 +123,29 @@ The package is structured with:
 - `src/newsletter_uploader/` - Core package modules
 - `tests/` - Comprehensive test suite
 - CI runs on GitHub Actions for Python 3.8-3.11
+
+## Claude Code Automations
+
+Custom subagents and slash commands for newsletter workflow (see `.claude/README.md` for details):
+
+**Subagents:**
+- `newsletter-writer` - Converts research posts to newsletter HTML sections
+- `campaign-analyzer` - Analyzes Mailchimp performance data
+
+**Slash Commands:**
+- `/create-newsletter --posts post1,post2 --event event-slug --audience uk`
+- `/campaign-stats 2024-10-29`
+- `/sync-countries`
+- `/upload-draft editions/file.html --audience uk --subject "..." --preview "..."`
+
+Example workflow:
+```bash
+# Generate newsletter from research posts
+/create-newsletter --posts uk-carbon-tax,uk-vat --event nov-3-london --audience uk
+
+# Upload to Mailchimp
+/upload-draft editions/2025-10-02-uk.html --audience uk --subject "..." --preview "..."
+
+# Check performance later
+/campaign-stats 2025-10-02
+```
