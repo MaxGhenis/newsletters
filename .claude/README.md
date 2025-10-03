@@ -31,6 +31,20 @@ Analyzes Mailchimp campaign performance and provides data-driven recommendations
 Use campaign-analyzer to analyze our last 6 months of newsletters
 ```
 
+### newsletter-previewer
+Opens newsletter HTML in browser, captures screenshots, and validates email compatibility.
+
+**Usage:**
+- Opens HTML in browser for visual review
+- Takes screenshots at desktop (600px) and mobile (320px) widths
+- Validates email client compatibility
+- Checks links and images
+
+**Example:**
+```
+Use newsletter-previewer to preview editions/2025-10-02-uk.html
+```
+
 ## Slash Commands
 
 ### /create-newsletter
@@ -74,6 +88,15 @@ Upload newsletter to Mailchimp as draft campaign.
 ```
 
 Wrapper around `upload-newsletter` command with validation and helpful output.
+
+### /preview-newsletter
+Preview newsletter with screenshots and validation.
+
+```bash
+/preview-newsletter editions/2025-10-02-uk.html
+```
+
+Opens HTML in browser, captures screenshots at different viewport sizes, and validates email compatibility.
 
 ## File Structure
 
