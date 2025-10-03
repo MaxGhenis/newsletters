@@ -30,6 +30,9 @@ config.js
 *.key
 *.pem
 
+# Don't commit contact lists (privacy)
+*.csv
+
 # Python
 __pycache__/
 *.py[cod]
