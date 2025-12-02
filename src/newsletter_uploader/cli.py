@@ -13,8 +13,7 @@ from .uploader import NewsletterUploader
 @click.option(
     "--audience",
     type=click.Choice(["uk", "us", "all"], case_sensitive=False),
-    required=True,
-    help="Target audience: uk (UK only), us (all non-UK), or all (everyone)",
+    help="Target audience: uk (UK only), us (all non-UK), or all (everyone). Required for new campaigns, ignored when updating.",
 )
 @click.option("--subject", required=True, help="Email subject line")
 @click.option("--preview", required=True, help="Preview text (shown in email inbox)")
@@ -33,7 +32,11 @@ from .uploader import NewsletterUploader
     default="71ed1f89d8",
     help="Mailchimp list ID (or set MAILCHIMP_LIST_ID env var)",
 )
-def main(html_file, audience, subject, preview, title, api_key, list_id):
+@click.option(
+    "--campaign-id",
+    help="Update existing campaign instead of creating new one",
+)
+def main(html_file, audience, subject, preview, title, api_key, list_id, campaign_id):
     """
     Upload newsletter HTML to Mailchimp as a draft campaign.
 
@@ -65,10 +68,22 @@ def main(html_file, audience, subject, preview, title, api_key, list_id):
         )
         sys.exit(1)
 
+    # Validate audience is provided for new campaigns
+    if not campaign_id and not audience:
+        click.echo(
+            "Error: --audience is required when creating a new campaign.",
+            err=True,
+        )
+        sys.exit(1)
+
     # Create client and uploader
-    click.echo("📧 Creating Mailchimp draft campaign")
+    if campaign_id:
+        click.echo("📧 Updating Mailchimp draft campaign")
+        click.echo(f"   Campaign ID: {campaign_id}")
+    else:
+        click.echo("📧 Creating Mailchimp draft campaign")
+        click.echo(f"   Audience: {audience.upper()}")
     click.echo(f"   File: {html_file}")
-    click.echo(f"   Audience: {audience.upper()}")
     click.echo(f"   Subject: {subject}")
     click.echo()
 
@@ -82,28 +97,43 @@ def main(html_file, audience, subject, preview, title, api_key, list_id):
         html_content = html_file.read_text()
         click.echo(f"✓ Read {len(html_content)} characters")
 
-        click.echo("\nCreating campaign...")
-        audience_type = AudienceType(audience)
-        result = uploader.upload(
-            html_file=html_file,
-            audience=audience_type,
-            subject=subject,
-            preview_text=preview,
-            title=title,
-        )
+        if campaign_id:
+            # Update existing campaign
+            click.echo("\nUpdating campaign...")
+            result = uploader.update(
+                campaign_id=campaign_id,
+                html_file=html_file,
+                subject=subject,
+                preview_text=preview,
+                title=title,
+            )
+            click.echo(f"✓ Campaign updated (ID: {campaign_id})")
+            success_message = "✅ DRAFT CAMPAIGN UPDATED SUCCESSFULLY"
+        else:
+            # Create new campaign
+            click.echo("\nCreating campaign...")
+            audience_type = AudienceType(audience)
+            result = uploader.upload(
+                html_file=html_file,
+                audience=audience_type,
+                subject=subject,
+                preview_text=preview,
+                title=title,
+            )
+            click.echo(f"✓ Campaign created (ID: {result['campaign_id']})")
+            success_message = "✅ DRAFT CAMPAIGN CREATED SUCCESSFULLY"
 
-        campaign_id = result["campaign_id"]
+        result_campaign_id = result["campaign_id"]
         web_id = result["web_id"]
-
-        click.echo(f"✓ Campaign created (ID: {campaign_id})")
 
         # Display results
         click.echo("\n" + "=" * 60)
-        click.echo("✅ DRAFT CAMPAIGN CREATED SUCCESSFULLY")
+        click.echo(success_message)
         click.echo("=" * 60)
-        click.echo(f"Campaign ID: {campaign_id}")
+        click.echo(f"Campaign ID: {result_campaign_id}")
         click.echo(f"Web ID: {web_id}")
-        click.echo(f"Audience: {audience.upper()}")
+        if not campaign_id:
+            click.echo(f"Audience: {audience.upper()}")
         click.echo(f"Subject: {subject}")
 
         # Extract datacenter from API key for URL

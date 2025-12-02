@@ -108,6 +108,32 @@ upload-newsletter editions/2025-01-01-global.html \
 
 The command creates a **draft campaign** (not sent) that you can review, test, and send from the Mailchimp web interface.
 
+### Updating Existing Drafts
+
+**IMPORTANT:** When making changes to a newsletter that has already been uploaded to Mailchimp, **update the existing campaign** instead of creating a new one. Use the Mailchimp API to update the campaign content:
+
+```python
+import requests
+
+API_KEY = "your-api-key"
+SERVER = "us5"  # from API key suffix
+CAMPAIGN_ID = "existing-campaign-id"
+
+url = f"https://{SERVER}.api.mailchimp.com/3.0/campaigns/{CAMPAIGN_ID}/content"
+auth = ("anystring", API_KEY)
+
+with open("editions/your-newsletter.html", "r") as f:
+    html_content = f.read()
+
+response = requests.put(url, auth=auth, json={"html": html_content})
+```
+
+To delete an accidentally created duplicate campaign:
+```python
+url = f"https://{SERVER}.api.mailchimp.com/3.0/campaigns/{CAMPAIGN_ID}"
+requests.delete(url, auth=auth)
+```
+
 ### Development
 
 ```bash

@@ -73,3 +73,55 @@ class NewsletterUploader:
             "campaign_id": campaign_id,
             "web_id": web_id,
         }
+
+    def update(
+        self,
+        campaign_id: str,
+        html_file: Path,
+        subject: Optional[str] = None,
+        preview_text: Optional[str] = None,
+        title: Optional[str] = None,
+        from_name: Optional[str] = None,
+    ) -> Dict:
+        """
+        Update an existing Mailchimp campaign.
+
+        Args:
+            campaign_id: Mailchimp campaign ID to update
+            html_file: Path to HTML file to upload
+            subject: Optional new email subject line
+            preview_text: Optional new preview text
+            title: Optional new internal campaign title
+
+        Returns:
+            Dict with campaign_id and web_id
+
+        Raises:
+            FileNotFoundError: If HTML file doesn't exist
+            Exception: If update fails
+        """
+        # Read HTML file
+        if not html_file.exists():
+            raise FileNotFoundError(f"HTML file not found: {html_file}")
+
+        html_content = html_file.read_text(encoding="utf-8")
+
+        # Update campaign settings if provided
+        if subject or preview_text or title:
+            self.client.update_campaign(
+                campaign_id=campaign_id,
+                subject=subject,
+                preview_text=preview_text,
+                title=title,
+            )
+
+        # Update HTML content
+        self.client.upload_content(campaign_id, html_content)
+
+        # Get campaign info to return web_id
+        response = self.client._get_campaign(campaign_id)
+
+        return {
+            "campaign_id": campaign_id,
+            "web_id": response["web_id"],
+        }

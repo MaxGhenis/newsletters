@@ -99,3 +99,79 @@ class MailchimpClient:
             raise Exception(
                 f"Error uploading content: {response.status_code}\n{response.text}"
             )
+
+    def update_campaign(
+        self,
+        campaign_id: str,
+        subject: Optional[str] = None,
+        preview_text: Optional[str] = None,
+        title: Optional[str] = None,
+        from_name: Optional[str] = None,
+    ) -> Dict:
+        """
+        Update campaign settings.
+
+        Args:
+            campaign_id: Mailchimp campaign ID
+            subject: New email subject line (optional)
+            preview_text: New preview text (optional)
+            title: New internal campaign title (optional)
+            from_name: New sender name (optional)
+
+        Returns:
+            Updated campaign data from Mailchimp API
+
+        Raises:
+            Exception: If campaign update fails
+        """
+        settings = {}
+        if subject is not None:
+            settings["subject_line"] = subject
+        if preview_text is not None:
+            settings["preview_text"] = preview_text
+        if title is not None:
+            settings["title"] = title
+        if from_name is not None:
+            settings["from_name"] = from_name
+
+        update_data = {}
+        if settings:
+            update_data["settings"] = settings
+
+        response = requests.patch(
+            f"{self.base_url}/campaigns/{campaign_id}",
+            auth=("anystring", self.api_key),
+            json=update_data,
+        )
+
+        if response.status_code != 200:
+            raise Exception(
+                f"Error updating campaign: {response.status_code}\n{response.text}"
+            )
+
+        return response.json()
+
+    def _get_campaign(self, campaign_id: str) -> Dict:
+        """
+        Get campaign details.
+
+        Args:
+            campaign_id: Mailchimp campaign ID
+
+        Returns:
+            Campaign data from Mailchimp API
+
+        Raises:
+            Exception: If request fails
+        """
+        response = requests.get(
+            f"{self.base_url}/campaigns/{campaign_id}",
+            auth=("anystring", self.api_key),
+        )
+
+        if response.status_code != 200:
+            raise Exception(
+                f"Error getting campaign: {response.status_code}\n{response.text}"
+            )
+
+        return response.json()
