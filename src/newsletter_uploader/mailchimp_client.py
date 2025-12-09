@@ -1,6 +1,8 @@
 """Mailchimp API client for campaign management."""
-import requests
+
 from typing import Dict, Optional
+
+import requests
 
 
 class MailchimpClient:

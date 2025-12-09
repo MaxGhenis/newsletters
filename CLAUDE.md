@@ -37,8 +37,10 @@ All newsletter HTML files follow this pattern:
 
 ## Creating New Newsletters
 
-1. Create a new file in `editions/` with date format: `YYYY-MM-DD.html`
-2. Copy structure from existing edition
+**IMPORTANT: Always start from the most recent newsletter as a template.** The template structure evolves over time, so copying from the latest edition ensures you use current styling, layout patterns, and best practices.
+
+1. Find the most recent newsletter in `editions/` (sorted by date)
+2. Copy it as a new file with date format: `YYYY-MM-DD-{audience}.html` (e.g., `2025-12-02-uk.html`)
 3. Update content while maintaining:
    - Inline styles for email client compatibility
    - Responsive table layout in footer (Mailchimp CAN-SPAM compliance)

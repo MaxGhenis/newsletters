@@ -1,8 +1,10 @@
 """Command-line interface for newsletter uploader."""
-import os
+
 import sys
 from pathlib import Path
+
 import click
+
 from .audience import AudienceType
 from .mailchimp_client import MailchimpClient
 from .uploader import NewsletterUploader
@@ -13,7 +15,7 @@ from .uploader import NewsletterUploader
 @click.option(
     "--audience",
     type=click.Choice(["uk", "us", "all"], case_sensitive=False),
-    help="Target audience: uk (UK only), us (all non-UK), or all (everyone). Required for new campaigns, ignored when updating.",
+    help="Target audience: uk, us, or all. Required for new campaigns.",
 )
 @click.option("--subject", required=True, help="Email subject line")
 @click.option("--preview", required=True, help="Preview text (shown in email inbox)")
@@ -63,7 +65,8 @@ def main(html_file, audience, subject, preview, title, api_key, list_id, campaig
     # Validate API key
     if not api_key:
         click.echo(
-            "Error: MAILCHIMP_API_KEY not found. Set it via --api-key or environment variable.",
+            "Error: MAILCHIMP_API_KEY not found. "
+            "Set it via --api-key or environment variable.",
             err=True,
         )
         sys.exit(1)
@@ -138,9 +141,13 @@ def main(html_file, audience, subject, preview, title, api_key, list_id, campaig
 
         # Extract datacenter from API key for URL
         datacenter = api_key.split("-")[-1]
-        click.echo(f"\n🔗 Edit in Mailchimp:")
-        click.echo(f"   https://{datacenter}.admin.mailchimp.com/campaigns/edit?id={web_id}")
-        click.echo("\n⚠️  This is a DRAFT - not sent yet. Review and send from Mailchimp.")
+        click.echo("\n🔗 Edit in Mailchimp:")
+        click.echo(
+            f"   https://{datacenter}.admin.mailchimp.com/campaigns/edit?id={web_id}"
+        )
+        click.echo(
+            "\n⚠️  This is a DRAFT - not sent yet. Review and send from Mailchimp."
+        )
 
     except FileNotFoundError as e:
         click.echo(f"❌ Error: {e}", err=True)

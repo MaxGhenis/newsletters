@@ -1,6 +1,7 @@
 """Audience targeting configuration for Mailchimp campaigns."""
+
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 
 class AudienceType(Enum):
@@ -23,7 +24,8 @@ def get_segment_opts(audience: AudienceType) -> Optional[Dict]:
 
     Notes:
         - UK: Only subscribers with COUNTRY = "United Kingdom"
-        - US: All subscribers where COUNTRY ≠ "United Kingdom" (includes US and missing country)
+        - US: All subscribers where COUNTRY ≠ "United Kingdom"
+          (includes US and missing country)
         - ALL: No filtering (returns None)
     """
     if audience == AudienceType.UK:

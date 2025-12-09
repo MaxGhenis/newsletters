@@ -1,7 +1,9 @@
 """Tests for CLI interface."""
+
+
 import pytest
 from click.testing import CliRunner
-from pathlib import Path
+
 from newsletter_uploader.cli import main
 
 
@@ -26,7 +28,9 @@ class TestCLI:
         """Test CLI requires HTML file argument."""
         result = runner.invoke(main, [])
         assert result.exit_code != 0
-        assert "Missing argument" in result.output or "required" in result.output.lower()
+        assert (
+            "Missing argument" in result.output or "required" in result.output.lower()
+        )
 
     def test_cli_requires_audience(self, runner, html_file):
         """Test CLI requires --audience option."""
@@ -99,9 +103,7 @@ class TestCLI:
     def test_cli_accepts_valid_audiences(self, runner, html_file, mocker):
         """Test CLI accepts valid audience values."""
         # Mock the MailchimpClient and uploader
-        mock_client = mocker.patch(
-            "newsletter_uploader.cli.MailchimpClient"
-        ).return_value
+        mocker.patch("newsletter_uploader.cli.MailchimpClient")
         mock_uploader = mocker.patch(
             "newsletter_uploader.cli.NewsletterUploader"
         ).return_value
@@ -148,9 +150,7 @@ class TestCLI:
 
     def test_cli_success_output(self, runner, html_file, mocker):
         """Test CLI success output formatting."""
-        mock_client = mocker.patch(
-            "newsletter_uploader.cli.MailchimpClient"
-        ).return_value
+        mocker.patch("newsletter_uploader.cli.MailchimpClient")
         mock_uploader = mocker.patch(
             "newsletter_uploader.cli.NewsletterUploader"
         ).return_value

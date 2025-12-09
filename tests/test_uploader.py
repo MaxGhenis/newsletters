@@ -1,8 +1,11 @@
 """Tests for newsletter uploader."""
-import pytest
+
 from pathlib import Path
-from newsletter_uploader.uploader import NewsletterUploader
+
+import pytest
+
 from newsletter_uploader.audience import AudienceType
+from newsletter_uploader.uploader import NewsletterUploader
 
 
 @pytest.fixture
@@ -126,7 +129,9 @@ class TestNewsletterUploader:
         call_kwargs = mock_client.create_campaign.call_args[1]
         assert call_kwargs["title"] == "test_newsletter"
 
-    def test_upload_handles_campaign_creation_error(self, uploader, mock_client, html_file):
+    def test_upload_handles_campaign_creation_error(
+        self, uploader, mock_client, html_file
+    ):
         """Test upload handles campaign creation errors."""
         mock_client.create_campaign.side_effect = Exception("API Error")
 
@@ -141,7 +146,9 @@ class TestNewsletterUploader:
         # Content upload should not be called if campaign creation fails
         mock_client.upload_content.assert_not_called()
 
-    def test_upload_handles_content_upload_error(self, uploader, mock_client, html_file):
+    def test_upload_handles_content_upload_error(
+        self, uploader, mock_client, html_file
+    ):
         """Test upload handles content upload errors."""
         mock_client.create_campaign.return_value = {
             "id": "campaign123",

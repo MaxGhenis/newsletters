@@ -1,5 +1,7 @@
 """Tests for audience targeting."""
+
 import pytest
+
 from newsletter_uploader.audience import AudienceType, get_segment_opts
 
 

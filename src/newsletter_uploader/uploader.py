@@ -1,6 +1,8 @@
 """Newsletter uploader for Mailchimp campaigns."""
+
 from pathlib import Path
 from typing import Dict, Optional
+
 from .audience import AudienceType, get_segment_opts
 from .mailchimp_client import MailchimpClient
 

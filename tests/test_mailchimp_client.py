@@ -1,6 +1,8 @@
 """Tests for Mailchimp client."""
+
 import pytest
 import responses
+
 from newsletter_uploader.mailchimp_client import MailchimpClient
 
 
