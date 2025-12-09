@@ -1,0 +1,25 @@
+{
+  "comment": "Organization domains that don't have obvious country TLDs. Clear TLDs (.uk, .edu, .gov) are handled in code.",
+  "uk_organizations": [
+    "capuk.org",
+    "resolutionfoundation.org",
+    "ippr.org"
+  ],
+  "us_organizations": [
+    "arnoldventures.org",
+    "pritzkerfoundation.org",
+    "brookings.edu",
+    "urban.org",
+    "cbpp.org",
+    "crfb.org",
+    "nber.org",
+    "cato.org",
+    "heritage.org",
+    "aei.org"
+  ],
+  "tags": {
+    "us": [
+      "Arnold Ventures SALTernative"
+    ]
+  }
+}
